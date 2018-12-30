@@ -1,0 +1,197 @@
+/* GENERAL STYLING *************************************************************************************/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* WEBCAM VIDEO STYLING ********************************************************************************/
+video {
+  will-change: opacity;
+  transform: translateZ(0);
+  position: fixed;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  height: 90vh;
+  margin: 0 auto;
+  opacity: 0;
+  transition: opacity 5s ease;
+  transition-delay: 1s;
+}
+
+video.show {
+  opacity: 1;
+  /* transform: translateY(-50%); */
+}
+
+/* CHART STYLING ***************************************************************************************/
+canvas#frequency-chart {
+  display: none;
+  transform: translateZ(0);
+  will-change: opacity;
+  position: fixed;
+  width: 100vw;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: opacity 1s ease;
+}
+
+canvas#frequency-chart.hide {
+  opacity: 0;
+  /* transform: translateY(100vw); */
+}
+
+/* SNAPSHOT CANVAS STYLING ********************************************************************************/
+canvas#snapshot-canvas {
+  position: fixed;
+  top: 100vh;
+  left: 0;
+}
+
+/* BACKGROUND STYLING **********************************************************************************/
+
+// Background Gradient
+
+body {
+    margin: 0;
+    background: linear-gradient(to top left, #292A48 20%,  #392061 50%, #29335C);
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+  }
+
+// little Stars
+
+.star-container {
+  $starWidth: 10px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 100vw;
+  height: 100vh;
+
+  & > div {
+    transform: translateZ(0);
+    will-change: transform;
+    position: absolute;
+    border-radius: 50%;
+    mix-blend-mode: screen;
+    background-image: radial-gradient(
+      hsl(0, 0%, 100%),
+      hsl(0, 0%, 100%) 10%,
+      hsla(180, 100%, 80%, 0) 56%
+    );
+
+    @keyframes fade-frames {
+      0% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.7;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+  }
+
+  @for $i from 1 through 300 {
+    & > div:nth-of-type(#{$i}) {
+      $circleSize: random($starWidth);
+      width: $circleSize + px;
+      height: $circleSize + px;
+      $scaleFactor: random(25) / 10.0;
+
+      $endPositionX: random(20) + 100;
+      $framesName: "move-star-" + $i;
+      $scaleAnimationName: "scale-star-" + $i;
+      $scaleDelay: random(5000) + ms;
+      $moveDuration: 5000 + random(10000) + ms;
+      $delayDuration: random(20000) + ms;
+      transform: translate(#{- ($circleSize + 10) + px}, #{random(100) + vh});
+
+      animation: fade-frames 200ms linear 0s infinite, #{$scaleAnimationName} 2s linear $scaleDelay infinite, #{$framesName} $moveDuration linear $delayDuration infinite;
+
+      @keyframes #{$scaleAnimationName} {
+        0% {
+          width: $circleSize * 0.5 + px;
+          height: $circleSize * 0.5 + px;
+        }
+
+        50% {
+          width: $circleSize * $scaleFactor + px;
+          height: $circleSize * $scaleFactor + px;
+        }
+
+        100% {
+          width: $circleSize * 0.5 + px;
+          height: $circleSize * 0.5 + px;
+        }
+
+      }
+
+      @keyframes #{$framesName} {
+        to {
+          transform: translate(#{$endPositionX + vw}, #{random(100) + vh});
+        }
+      }
+    }
+  }
+}
+
+
+// Bokehs
+
+$primary_colors: #A135D8 #B13CC8 #7C72A0 #D562C7 #BD369D #7022B6 #D15BB1 #8E39A0 #6F38DC #6E44C2 #E2BCE1 #E8EBFA #D8B1F4 #DC59C1 #EAC5E6 #A83E9A #DFB2E9 #ffc15e #F7B05B #F7934C #364156;
+
+.bokeh-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -2;
+
+  & > div {
+    transform: translateZ(0);
+    will-change: transform;
+    transform: translate3d(0, 0, 0);
+    position: absolute;
+    mix-blend-mode: screen;
+  }
+  
+  @for $i from 1 through 150 {
+    $size: random(300);
+    & > div:nth-of-type(#{$i}) {
+      $color: nth($primary_colors, random(length($primary_colors)));
+      background: $color;
+      box-shadow: 0 0 random(30) + px random(30) + px $color;
+      border-radius: 50%;
+      width: $size + px;
+      height: $size + px;
+      opacity: random(10) / 100;
+      transform: translate(-30vw, #{random(100) + vh});
+
+      $endPositionX: random(30) + 100;
+      $framesName: "move-bokeh-" + $i;
+      $moveDuration: 15000 + random(10000) + ms;
+      $delayDuration: random(20000) + ms;
+
+      animation: #{$framesName} $moveDuration linear $delayDuration infinite;
+      
+      @keyframes #{$framesName} {
+        to {
+          transform: translate(#{$endPositionX + vw}, #{random(100) + vh});
+        }
+      }
+    }
+  }
+}

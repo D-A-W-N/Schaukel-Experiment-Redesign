@@ -1,0 +1,24 @@
+{
+  "name": "schaukel-experiment-redesign",
+  "version": "0.0.1",
+  "description": "Ausgabe eines Potentiometer Signals für ein MesseProjekt",
+  "main": "start.js",
+  "dependencies": {
+    "browserify": "^16.2.3",
+    "chalk": "^2.4.1",
+    "draftlog": "^1.0.12",
+    "express": "^4.16.4",
+    "johnny-five": "^1.0.0",
+    "jquery": "^3.3.1",
+    "sass": "^1.15.2",
+    "socket.io": "^2.2.0",
+    "socket.io-stream": "^0.9.1",
+    "underscore": "^1.9.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Patrick und Nils Schumacher",
+  "license": "ISC"
+}

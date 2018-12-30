@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Match</title>
+    <link rel="stylesheet" type="text/css" href="./css/custom.css" />
+</head>
+
+<body>
+    <!-- Stars -->
+    <div class="star-container"></div>
+
+    <!-- Bokehs -->
+    <div class="bokeh-container"></div>
+
+
+    <video id="webcam-video" autoplay></video>
+
+    <canvas id="frequency-chart"></canvas>
+
+    <canvas id="snapshot-canvas" width="1920" height="1080"></canvas>
+</body>
+<script src="/jquery/jquery.js"></script>
+<script src="./js/socket.io.js"></script>
+<script src="./js/socket.io-stream.js"></script>
+<script src="./js/chart.js"></script>
+<script src="./js/custom.js"></script>
+
+</html>
