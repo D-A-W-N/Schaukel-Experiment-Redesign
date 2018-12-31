@@ -158,10 +158,10 @@ async function emitDummyData(io) {
             if (increase === true) { index += 0.1; } else { index -= 0.1; }
 
             io.sockets.emit('pot0', Math.sin(index));
-            p1(Math.sin(index));
+            p1('[DUMMYDATA]', 'Pot 1:', Math.sin(index));
 
             io.sockets.emit('pot1', Math.sin(index) + 0.1);
-            p2(Math.sin(index) + 0.1);
+            p2('[DUMMYDATA]', 'Pot 2:', Math.sin(index) + 0.1);
         } catch (err) {
             message('[DUMMYDATA]', "::ERROR::", err.code, err.message);
         }
@@ -241,31 +241,7 @@ async function startApp() {
     }, (reason) => {
         return emitDummyData(sio);
     }).catch((err) => { message('[APP]', "::ERROR::", err.code, err.message) });
-
-    // waitGetPort.then((response) => {
-    //     if (!response) {
-    //         return setDummyData(sio);
-    //     } else {
-    //         const waitConnectBoard = connectBoard(waitGetPort);
-    //         waitConnectBoard.then(() => {
-    //             return emitSensorData(sio);
-    //         });
-
-    //     }
-    // });
-
-    // const waitgetInitWebserver = initWebserver();
-    // const o = await waitgetInitWebserver;
-    // const waitForBrowser = checkforBrowser(o);
-
-    // waitForBrowser.then((status) => {
-    //     if (status) {
-    //         return getSensorData(o)
-    //     }
-    // });
-    // const waitgetSensorData = await getSensorData(o);
-
-    return "done!";
+    return
 }
 
 startApp();
