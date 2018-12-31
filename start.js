@@ -44,6 +44,8 @@ const socketio = require('socket.io')
 * */
 const five = require("johnny-five");
 
+
+// Mithilfe von Serialport sämtliche angeschlossenen Ports finden und nach Adruino Kennzeichnung suchen
 async function getPort() {
     var message = console.draft();
 
@@ -60,7 +62,7 @@ async function getPort() {
                     count += 1;
                     pm = port['manufacturer'];
 
-                    //..Wenn Arduino gefunden setzte Portvariable
+                    //..Wenn Arduino gefunden setzte Portvariable uns Resolve den PortString
                     if (typeof pm !== 'undefined' && pm.includes('arduino')) {
                         done = true;
                         let portString = port.comName.toString()
@@ -68,7 +70,7 @@ async function getPort() {
                         resolve(portString)
                     }
 
-                    //..Wenn alle Ports ohne ergebnis durchgelaufen sind, Meldung ausgeben
+                    //..Wenn alle Ports ohne ergebnis durchgelaufen sind, Meldung ausgeben und reject duchführen um die Meldung abfangen zu können
                     if (count === allports && done === false) {
                         message('[PORT]', `No Arduino found.`);
                         reject();
@@ -82,24 +84,29 @@ async function getPort() {
     });
 }
 
+// Verbindung zum Adruino mit Hilfe des ermittelten Ports aufbauen
 async function connectBoard(port) {
     var message = console.draft();
     return new Promise((resolve, reject) => {
         try {
+            // Versuche die Verbindung  zum Adruino herzustellen
             var board = new five.Board({
                 port: port,
                 repl: false,
                 debug: false
             });
 
+            // Wenn Fehler Event ausgelöst wird -> reject
             board.on("error", function (err) {
                 return reject(err)
             });
 
+            // Mitteilungen des Adruino werden im Console Draft erfasst.
             board.on("message", function (event) {
                 message('[Board]', event.class, event.message);
             });
 
+            // Wenn der Adrunio verbunden und bereit ist -> resolve
             board.on("ready", function () {
                 message('[Board]', "Connected to Arduino-Board on", port);
 
@@ -112,22 +119,31 @@ async function connectBoard(port) {
     });
 }
 
+// emit Data from Connected Adruino to Webserversocket
 async function emitSensorData(io) {
     var message = console.draft();
 
     return new Promise((resolve, reject) => {
         try {
-            // Create new `potentiometer` hardware instances.
+            // erstelle `potentiometer` Hardwareinstanz.
             // [{ pin: 'A0' }, { pin: 'A1' }, { pin: 'A2' }, { pin: 'A3' }, { pin: 'A4' }]
             var sensors = new five.Sensors([{ pin: 'A0', freq: 60 }, { pin: 'A1', freq: 60 }]);
             let i = 0;
+
+            // Für jeden Sensor in der Collection werden Daten empfangen, bearbeitet und zum Webserver gesendet
             sensors.forEach(function (sensor) {
+                // Dynamische Variable für die Ausgabe der Sensor Werte im KonsolenDraft
                 var s = "pot" + i;
                 var p = 'var s = console.draft()';
                 eval(p);
+
+                // Sofern sich die Werte ändern soll an den Webserver gesendet werden
                 sensor.on("change", function () {
-                    let v = this.scaleTo([-90, 90]);
+                    // Skaliere ankommende Werte auf einen Bereich von -1 und 1
+                    let v = this.fscaleTo([-1, 1]);
+                    // Sende die Skalierten Werte an den Webserver
                     io.sockets.emit("pot" + this.pin, v);
+                    // Update der Dynamischen Variable mit den Sensor Werte für den jeweiligen Sensor
                     var o = 's("Pot", this.pin+":", v)';
                     eval(o);
                 });
@@ -142,6 +158,8 @@ async function emitSensorData(io) {
     });
 }
 
+
+// Emit Dummy Values to Webserversocket
 async function emitDummyData(io) {
     var message = console.draft('[DUMMYDATA]', "Init Dummy Data for Socket Simulation");
     var p1 = console.draft();
@@ -169,13 +187,13 @@ async function emitDummyData(io) {
 
 }
 
+// Init Webserver
 async function initWebserver() {
     var message = console.draft();
     return new Promise((resolve, reject) => {
         // Create app instance
         const app = new express();
         const server = http.Server(app);
-
         const io = socketio(server);
 
         try {
@@ -188,7 +206,7 @@ async function initWebserver() {
 
             server.listen(3000, () => {
                 var port = server.address().port;
-                // Update Console Draft for Messages
+                // Server erfolgreich gestartet, aktualisiere Webserver Statusmeldung
                 message('[WEBSERVER]', `started on the http://localhost:${port}`);
                 resolve(io);
             });
@@ -199,13 +217,16 @@ async function initWebserver() {
     });
 }
 
+// Check for Browser is Connected to Webserver
 async function checkforBrowser(io) {
     var message = console.draft();
     message('[BROWSER]', 'Wait for Browser is Connecting')
     return new Promise((resolve, reject) => {
         try {
+            // Wenn eine Socketverbindung hergestellt wurde ist das ein Indikator dafür das der Browser die Seite geöffnet hat
             io.on('connection', function (socket) {
                 message('[BROWSER]', 'Connected.')
+                // Aktualisiere Meldung wenn Browser geschlossen wird
                 socket.on('disconnect', () => {
                     message('[BROWSER]', 'Disconnected');
                 });
@@ -218,6 +239,7 @@ async function checkforBrowser(io) {
     });
 }
 
+// Init all async Tasks
 async function startApp() {
     var message = console.draft();
     let sio;
