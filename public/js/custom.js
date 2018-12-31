@@ -55,11 +55,11 @@ function saveImage() {
 $(document).ready(function () {
 
     // Create Div Elements for Stars and Bokehs
-    for (let index = 0; index < 100; index++) {
+    for (let index = 0; index < 50; index++) {
         $('.star-container').append('<div></div>');
     }
 
-    for (let index = 0; index < 50; index++) {
+    for (let index = 0; index < 25; index++) {
         $('.bokeh-container').append('<div></div>');
     }
 
@@ -134,7 +134,7 @@ $(document).ready(function () {
 
     let socket = io();
 
-    socket.on("pot0", function (message) {
+    socket.on("pot0", async function (message) {
         // message = Math.round(message / 10) * 10;
         chartOneValue = message;
 
@@ -154,7 +154,7 @@ $(document).ready(function () {
         }
     });
 
-    socket.on("pot1", function (message) {
+    socket.on("pot1", async function (message) {
         // message = Math.round(message / 10) * 10;
         chartTwoValue = message;
 
