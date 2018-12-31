@@ -17,6 +17,7 @@ latest npm
 
 ### Installing
 
+```sh
 1. install NodeJS
 2. install npm
 3. Clone The Repository
@@ -24,7 +25,7 @@ latest npm
 5. Change to the directory with the script
 6. execute "npm install" and then "npm rebuild"
 7. Now you can run the script with "node start.js" and view the results via http://localhost:3000 and in Console
-
+```
 
 ## Running the tests
 
