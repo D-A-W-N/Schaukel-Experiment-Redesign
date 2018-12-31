@@ -17,7 +17,7 @@ latest npm
 
 ### Installing
 
-```sh
+```
 1. install NodeJS
 2. install npm
 3. Clone The Repository
