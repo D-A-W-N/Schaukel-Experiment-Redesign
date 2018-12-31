@@ -183,7 +183,7 @@ async function emitDummyData(io) {
         } catch (err) {
             message('[DUMMYDATA]', "::ERROR::", err.code, err.message);
         }
-    }, 50);
+    }, 45);
 
 }
 

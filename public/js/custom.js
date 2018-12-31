@@ -109,6 +109,9 @@ $(document).ready(function () {
             elements: {
                 point: {
                     radius: 0
+                },
+                line: {
+                    tension: 0, // disables bezier curves
                 }
             },
             scales: {
@@ -134,42 +137,58 @@ $(document).ready(function () {
 
     let socket = io();
 
-    socket.on("pot0", async function (message) {
-        // message = Math.round(message / 10) * 10;
-        chartOneValue = message;
+    async function getFirstSensor() {
+        socket.on("pot0", async function (message) {
+            // message = Math.round(message / 10) * 10;
+            chartOneValue = message;
 
-        // if (message > 600 || message < 400) {
-        //     movedOne = true;
-        // }
+            // if (message > 600 || message < 400) {
+            //     movedOne = true;
+            // }
 
-        myLineChart.data.labels.push("");
-        myLineChart.data.datasets[0].data.push(message);
+            myLineChart.data.labels.push("");
+            myLineChart.data.datasets[0].data.push(message);
 
-        myLineChart.update(10);
+            myLineChart.update({
+                duration: 800,
+                easing: 'easeOutBounce'
+            });
 
-        if (myLineChart.data.datasets[0].data.length > 40) {
-            myLineChart.data.datasets[0].data.shift();
-            myLineChart.data.datasets[1].data.shift();
-            myLineChart.data.labels.shift();
-        }
-    });
+            if (myLineChart.data.datasets[0].data.length > 40) {
+                myLineChart.data.datasets[0].data.shift();
+                myLineChart.data.datasets[1].data.shift();
+                myLineChart.data.labels.shift();
+            }
+        });
+    }
 
-    socket.on("pot1", async function (message) {
-        // message = Math.round(message / 10) * 10;
-        chartTwoValue = message;
+    async function getSecondSensor() {
+        socket.on("pot1", async function (message) {
+            // message = Math.round(message / 10) * 10;
+            chartTwoValue = message;
 
-        // if (message > 600 || message < 400) {
-        //     movedTwo = true;
-        // }
+            // if (message > 600 || message < 400) {
+            //     movedTwo = true;
+            // }
 
-        myLineChart.data.datasets[1].data.push(message);
+            myLineChart.data.datasets[1].data.push(message);
 
-        myLineChart.update(10);
+            myLineChart.update({
+                duration: 10
+            });
 
-        if (myLineChart.data.datasets[0].data.length > 40) {
-            myLineChart.data.datasets[1].data.shift();
-        }
-    });
+            if (myLineChart.data.datasets[0].data.length > 40) {
+                myLineChart.data.datasets[1].data.shift();
+            }
+        });
+    }
+
+    async function initSensor() {
+        const waitInitFirstSensor = await getFirstSensor();
+        const waitInitSecondSensor = await getSecondSensor();
+    }
+
+    initSensor();
 
     function setDifferenceInterval() {
         differenceInterval = setInterval(function () {
