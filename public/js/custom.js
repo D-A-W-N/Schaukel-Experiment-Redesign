@@ -90,14 +90,14 @@ $(document).ready(function () {
                 label: "",
                 backgroundColor: "transparent",
                 borderColor: "#8818A1",
-                borderWidth: 4,
+                borderWidth: 10,
                 data: []
             }, {
                 fill: false,
                 label: "",
                 backgroundColor: "transparent",
                 borderColor: "#F39324",
-                borderWidth: 4,
+                borderWidth: 10,
                 data: []
             }]
         },
@@ -125,7 +125,7 @@ $(document).ready(function () {
                     display: false,
                     ticks: {
                         max: 1.5,
-                        min: -1
+                        min: -1.5
                     },
                     gridLines: {
                         display: false
@@ -154,7 +154,7 @@ $(document).ready(function () {
                 easing: 'easeOutBounce'
             });
 
-            if (myLineChart.data.datasets[0].data.length > 40) {
+            if (myLineChart.data.datasets[0].data.length > 100) {
                 myLineChart.data.datasets[0].data.shift();
                 myLineChart.data.datasets[1].data.shift();
                 myLineChart.data.labels.shift();
@@ -177,7 +177,7 @@ $(document).ready(function () {
                 duration: 10
             });
 
-            if (myLineChart.data.datasets[0].data.length > 40) {
+            if (myLineChart.data.datasets[0].data.length > 100) {
                 myLineChart.data.datasets[1].data.shift();
             }
         });
@@ -212,5 +212,5 @@ $(document).ready(function () {
         }, 100);
     }
 
-    // setDifferenceInterval();
+    setDifferenceInterval();
 });
