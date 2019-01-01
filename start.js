@@ -178,12 +178,12 @@ async function emitDummyData(io) {
             io.sockets.emit('pot0', Math.sin(index));
             p1('[DUMMYDATA]', 'Pot 1:', Math.sin(index));
 
-            io.sockets.emit('pot1', Math.sin(index) + 0.1);
-            p2('[DUMMYDATA]', 'Pot 2:', Math.sin(index) + 0.1);
+            io.sockets.emit('pot1', Math.sin(index + 0.05));
+            p2('[DUMMYDATA]', 'Pot 2:', Math.sin(index + 0.05));
         } catch (err) {
             message('[DUMMYDATA]', "::ERROR::", err.code, err.message);
         }
-    }, 45);
+    }, 50);
 
 }
 
