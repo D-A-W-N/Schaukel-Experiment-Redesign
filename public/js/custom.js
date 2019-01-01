@@ -151,7 +151,7 @@ $(document).ready(function () {
 
             myLineChart.update(10);
 
-            if (myLineChart.data.datasets[0].data.length > 40) {
+            if (myLineChart.data.datasets[0].data.length > 50) {
                 myLineChart.data.datasets[0].data.shift();
                 myLineChart.data.datasets[1].data.shift();
                 myLineChart.data.labels.shift();
@@ -172,7 +172,7 @@ $(document).ready(function () {
 
             myLineChart.update(10);
 
-            if (myLineChart.data.datasets[0].data.length > 40) {
+            if (myLineChart.data.datasets[0].data.length > 50) {
                 myLineChart.data.datasets[1].data.shift();
             }
         });

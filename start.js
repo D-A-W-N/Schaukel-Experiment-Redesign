@@ -173,7 +173,7 @@ async function emitDummyData(io) {
     setInterval(async () => {
         try {
             if (index == max) { increase = false; } else { increase = true; }
-            if (increase === true) { index += 0.1; } else { index -= 0.1; }
+            if (increase === true) { index += 0.05; } else { index -= 0.05; }
 
             io.sockets.emit('pot0', Math.sin(index));
             p1('[DUMMYDATA]', 'Pot 1:', Math.sin(index));
@@ -183,7 +183,7 @@ async function emitDummyData(io) {
         } catch (err) {
             message('[DUMMYDATA]', "::ERROR::", err.code, err.message);
         }
-    }, 50);
+    }, 25);
 
 }
 
