@@ -149,10 +149,7 @@ $(document).ready(function () {
             myLineChart.data.labels.push("");
             myLineChart.data.datasets[0].data.push(message);
 
-            myLineChart.update({
-                duration: 800,
-                easing: 'easeOutBounce'
-            });
+            myLineChart.update(10);
 
             if (myLineChart.data.datasets[0].data.length > 100) {
                 myLineChart.data.datasets[0].data.shift();
@@ -173,9 +170,7 @@ $(document).ready(function () {
 
             myLineChart.data.datasets[1].data.push(message);
 
-            myLineChart.update({
-                duration: 10
-            });
+            myLineChart.update(10);
 
             if (myLineChart.data.datasets[0].data.length > 100) {
                 myLineChart.data.datasets[1].data.shift();
