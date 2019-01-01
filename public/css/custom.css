@@ -16,7 +16,7 @@ video {
   height: 90vh;
   margin: 0 auto;
   opacity: 0;
-  transition: opacity 5s ease;
+  transition: opacity 1s ease;
   transition-delay: 1s; }
 
 video.show {

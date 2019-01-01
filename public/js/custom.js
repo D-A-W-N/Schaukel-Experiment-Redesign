@@ -4,15 +4,24 @@ let chartOneValue = 0;
 let chartTwoValue = 0;
 let equalCounter = 0;
 let differenceInterval;
+let video;
 
 function showCam(video) {
     $("canvas#frequency-chart").addClass("hide");
     $("video").addClass("show");
     clearInterval(differenceInterval);
 
-    setTimeout(function () {
+    let snapshotInterval = setInterval(function () {
         snapshot(video);
+    }, 500);
+
+    setTimeout(function(){
+        clearInterval(snapshotInterval);
     }, 2000);
+
+     setTimeout(function(){
+        hideCam();
+    }, 10000);
 }
 
 function hideCam() {
@@ -43,13 +52,35 @@ function saveImage() {
 
         // save image as png
         var link = document.createElement('a');
-        link.download = "snapshot_" + Date.now() + ".jpg";
-        link.href = canvas.toDataURL("image/jpg").replace("image/jpg", "image/octet-stream");;
+        link.download = "snapshot_" + Date.now() + ".png";
+        link.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");;
         link.click();
     }
     else {
         alert("Please use Chrome");
     }
+}
+
+function setDifferenceInterval() {
+    differenceInterval = setInterval(function () {
+        // if (movedOne || movedTwo) {
+
+        // Check if chart values are smiliar
+        var difference = Math.abs(chartOneValue - chartTwoValue);
+
+        if (difference <= 100) {
+            equalCounter++;
+        } else {
+            equalCounter = 0;
+        }
+        // }
+
+        if (equalCounter >= 100) {
+            equalCounter = 0;
+            showCam(video);
+        }
+
+    }, 100);
 }
 
 $(document).ready(function () {
@@ -66,7 +97,7 @@ $(document).ready(function () {
 
 
     //implement WebCam code
-    let video = document.getElementById("webcam-video");
+    video = document.getElementById("webcam-video");
 
     if (navigator.mediaDevices.getUserMedia) {
         navigator.mediaDevices.getUserMedia({ video: true })
@@ -185,27 +216,5 @@ $(document).ready(function () {
 
     initSensor();
 
-    function setDifferenceInterval() {
-        differenceInterval = setInterval(function () {
-            // if (movedOne || movedTwo) {
-
-            // Check if chart values are smiliar
-            var difference = Math.abs(chartOneValue - chartTwoValue);
-
-            if (difference <= 100) {
-                equalCounter++;
-            } else {
-                equalCounter = 0;
-            }
-            // }
-
-            if (equalCounter >= 100) {
-                equalCounter = 0;
-                showCam(video);
-            }
-
-        }, 100);
-    }
-
-    setDifferenceInterval();
+    // setDifferenceInterval();
 });
