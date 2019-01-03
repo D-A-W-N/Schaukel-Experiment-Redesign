@@ -1,7 +1,7 @@
 let movedOne = false;
 let movedTwo = false;
-let chartOneValue = 0;
-let chartTwoValue = 0;
+let chartOneValue = 0.00;
+let chartTwoValue = 0.00;
 let equalCounter = 0;
 let differenceInterval;
 let video;
@@ -39,7 +39,6 @@ function snapshot(video) {
     // Draws current image from the video element into the canvas
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
     saveImage();
-
 }
 
 function saveImage() {
@@ -52,8 +51,8 @@ function saveImage() {
 
         // save image as png
         var link = document.createElement('a');
-        link.download = "snapshot_" + Date.now() + ".png";
-        link.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");;
+        link.download = "snapshot_" + Date.now() + ".jpg";
+        link.href = canvas.toDataURL("image/jpg").replace("image/jpg", "image/octet-stream");;
         link.click();
     }
     else {
@@ -63,17 +62,14 @@ function saveImage() {
 
 function setDifferenceInterval() {
     differenceInterval = setInterval(function () {
-        // if (movedOne || movedTwo) {
-
-        // Check if chart values are smiliar
-        var difference = Math.abs(chartOneValue - chartTwoValue);
-
-        if (difference <= 100) {
-            equalCounter++;
-        } else {
-            equalCounter = 0;
+        if (movedOne || movedTwo) {
+            if (parseFloat(chartTwoValue) >= (parseFloat(chartOneValue) - 0.1) && parseFloat(chartTwoValue) <= (parseFloat(chartOneValue) + 0.1)) {
+                equalCounter++;
+                console.log(equalCounter);
+            } else {
+                equalCounter = 0;
+            }
         }
-        // }
 
         if (equalCounter >= 100) {
             equalCounter = 0;
@@ -117,18 +113,17 @@ $(document).ready(function () {
         data: {
             labels: "",
             datasets: [{
-                fill: false,
                 label: "",
                 backgroundColor: "transparent",
-                borderColor: "#8818A1",
-                borderWidth: 10,
+                borderColor: "#E600FF",
+                // 66cc33
+                borderWidth: 4,
                 data: []
             }, {
-                fill: false,
                 label: "",
                 backgroundColor: "transparent",
                 borderColor: "#F39324",
-                borderWidth: 10,
+                borderWidth: 4,
                 data: []
             }]
         },
@@ -143,20 +138,22 @@ $(document).ready(function () {
                 },
                 line: {
                     tension: 0, // disables bezier curves
+                    //cubicInterpolationMode: 'default',
                 }
             },
             scales: {
                 xAxes: [{
-                    display: false,
+                    display: true,
                     gridLines: {
                         display: false
                     }
                 }],
                 yAxes: [{
-                    display: false,
+                    display: true,
                     ticks: {
-                        max: 1.5,
-                        min: -1.5
+                        max: 0.5,
+                        min: -0.5,
+                        stepSize: 0.2,
                     },
                     gridLines: {
                         display: false
@@ -170,42 +167,40 @@ $(document).ready(function () {
 
     async function getFirstSensor() {
         socket.on("pot0", async function (message) {
-            // message = Math.round(message / 10) * 10;
+            message = parseFloat(message);
             chartOneValue = message;
 
-            // if (message > 600 || message < 400) {
-            //     movedOne = true;
-            // }
+            if (message > 0.15 || message < (-0.15) && movedOne == false) {
+                movedOne = true;
+            }
 
             myLineChart.data.labels.push("");
             myLineChart.data.datasets[0].data.push(message);
 
-            myLineChart.update(10);
-
             if (myLineChart.data.datasets[0].data.length > 100) {
                 myLineChart.data.datasets[0].data.shift();
-                myLineChart.data.datasets[1].data.shift();
                 myLineChart.data.labels.shift();
             }
+
+            myLineChart.update(10);
         });
     }
 
     async function getSecondSensor() {
         socket.on("pot1", async function (message) {
-            // message = Math.round(message / 10) * 10;
+            message = parseFloat(message) * (-1.000);
             chartTwoValue = message;
-
-            // if (message > 600 || message < 400) {
-            //     movedTwo = true;
-            // }
+            if (message > 0.15 || message < (-0.15) && movedTwo == false) {
+                movedTwo = true;
+            }
 
             myLineChart.data.datasets[1].data.push(message);
 
-            myLineChart.update(10);
-
-            if (myLineChart.data.datasets[0].data.length > 100) {
+            if (myLineChart.data.datasets[1].data.length > 100) {
                 myLineChart.data.datasets[1].data.shift();
             }
+
+            myLineChart.update(10);
         });
     }
 
@@ -216,5 +211,5 @@ $(document).ready(function () {
 
     initSensor();
 
-    // setDifferenceInterval();
+    setDifferenceInterval();
 });

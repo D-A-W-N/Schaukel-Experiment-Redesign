@@ -16,10 +16,11 @@ video {
   height: 90vh;
   margin: 0 auto;
   opacity: 0;
-  transition: opacity 1s ease;
-  transition-delay: 1s; }
+}
 
 video.show {
+  transition: opacity 1s ease;
+  transition-delay: 1s; 
   opacity: 1;
   /* transform: translateY(-50%); */ }
 
