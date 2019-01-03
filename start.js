@@ -127,7 +127,7 @@ async function emitSensorData(io) {
         try {
             // erstelle `potentiometer` Hardwareinstanz.
             // [{ pin: 'A0' }, { pin: 'A1' }, { pin: 'A2' }, { pin: 'A3' }, { pin: 'A4' }]
-            var sensors = new five.Sensors([{ pin: 'A0', freq: 45 }, { pin: 'A1', freq: 45 }]);
+            var sensors = new five.Sensors([{ pin: 'A0', freq: 40 }, { pin: 'A1', freq: 40 }]);
             let i = 0;
 
             // Für jeden Sensor in der Collection werden Daten empfangen, bearbeitet und zum Webserver gesendet
@@ -176,15 +176,15 @@ async function emitDummyData(io) {
             if (index == max) { increase = false; } else { increase = true; }
             if (increase === true) { index += 0.05; } else { index -= 0.05; }
 
-            io.sockets.emit('pot0', Math.sin(index));
-            p1('[DUMMYDATA]', 'Pot 1:', Math.sin(index));
+            io.sockets.emit('pot0',  0.40 * Math.sin(index));
+            p1('[DUMMYDATA]', 'Pot 1:', 0.40 * Math.sin(index));
 
-            io.sockets.emit('pot1', Math.sin(index + 0.05));
-            p2('[DUMMYDATA]', 'Pot 2:', Math.sin(index + 0.05));
+            io.sockets.emit('pot1',  0.40 * Math.sin(index) + 0.05);
+            p2('[DUMMYDATA]', 'Pot 2:', 0.40 * Math.sin(index) + 0.05);
         } catch (err) {
             message('[DUMMYDATA]', "::ERROR::", err.code, err.message);
         }
-    }, 25);
+    }, 40);
 
 }
 

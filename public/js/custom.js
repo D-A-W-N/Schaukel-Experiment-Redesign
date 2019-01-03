@@ -11,13 +11,15 @@ function showCam(video) {
     $("video").addClass("show");
     clearInterval(differenceInterval);
 
-    let snapshotInterval = setInterval(function () {
-        snapshot(video);
-    }, 500);
+    snapshot(video);
 
-    setTimeout(function(){
-        clearInterval(snapshotInterval);
-    }, 2000);
+    // let snapshotInterval = setInterval(function () {
+    //     snapshot(video);
+    // }, 1000);
+
+    // setTimeout(function(){
+    //     clearInterval(snapshotInterval);
+    // }, 4000);
 
      setTimeout(function(){
         hideCam();
@@ -51,8 +53,8 @@ function saveImage() {
 
         // save image as png
         var link = document.createElement('a');
-        link.download = "snapshot_" + Date.now() + ".jpg";
-        link.href = canvas.toDataURL("image/jpg").replace("image/jpg", "image/octet-stream");;
+        link.download = "snapshot_" + Date.now() + ".png";
+        link.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");;
         link.click();
     }
     else {
@@ -96,7 +98,7 @@ $(document).ready(function () {
     video = document.getElementById("webcam-video");
 
     if (navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia({ video: true })
+        navigator.mediaDevices.getUserMedia({audio: false, video: {width: 1920, height: 1080} })
             .then(function (stream) {
                 video.srcObject = stream;
             })
@@ -114,16 +116,31 @@ $(document).ready(function () {
             labels: "",
             datasets: [{
                 label: "",
+                // backgroundColor: "rgba(230,0,255,0.1)",
+                borderColor : "rgba(230,0,255,1)",
                 backgroundColor: "transparent",
-                borderColor: "#E600FF",
-                // 66cc33
-                borderWidth: 4,
+                borderWidth: 5,
                 data: []
             }, {
                 label: "",
+                // backgroundColor: "rgba(243, 147, 36, 0.1)",
+                borderColor: "rgba(243, 147, 36, 1)",
                 backgroundColor: "transparent",
-                borderColor: "#F39324",
-                borderWidth: 4,
+                borderWidth: 5,
+                data: []
+            },{
+                label: "",
+                // backgroundColor: "rgba(230,0,255,0.1)",
+                borderColor : "rgba(230,0,255,0.1)",
+                backgroundColor: "transparent",
+                borderWidth: 30,
+                data: []
+            },{
+                label: "",
+                // backgroundColor: "rgba(243, 147, 36, 0.1)",
+                borderColor: "rgba(243, 147, 36, 0.1)",
+                backgroundColor: "transparent",
+                borderWidth: 30,
                 data: []
             }]
         },
@@ -143,13 +160,13 @@ $(document).ready(function () {
             },
             scales: {
                 xAxes: [{
-                    display: true,
+                    display: false,
                     gridLines: {
                         display: false
                     }
                 }],
                 yAxes: [{
-                    display: true,
+                    display: false,
                     ticks: {
                         max: 0.5,
                         min: -0.5,
@@ -176,9 +193,11 @@ $(document).ready(function () {
 
             myLineChart.data.labels.push("");
             myLineChart.data.datasets[0].data.push(message);
+            myLineChart.data.datasets[2].data.push(message);
 
-            if (myLineChart.data.datasets[0].data.length > 100) {
+            if (myLineChart.data.datasets[0].data.length > 150) {
                 myLineChart.data.datasets[0].data.shift();
+                myLineChart.data.datasets[2].data.shift();
                 myLineChart.data.labels.shift();
             }
 
@@ -195,9 +214,11 @@ $(document).ready(function () {
             }
 
             myLineChart.data.datasets[1].data.push(message);
+            myLineChart.data.datasets[3].data.push(message);
 
-            if (myLineChart.data.datasets[1].data.length > 100) {
+            if (myLineChart.data.datasets[1].data.length > 150) {
                 myLineChart.data.datasets[1].data.shift();
+                myLineChart.data.datasets[3].data.shift();
             }
 
             myLineChart.update(10);

@@ -2,8 +2,7 @@
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-}
+  box-sizing: border-box; }
 
 /* WEBCAM VIDEO STYLING ********************************************************************************/
 video {
@@ -17,14 +16,13 @@ video {
   height: 90vh;
   margin: 0 auto;
   opacity: 0;
-  transition: opacity 5s ease;
-  transition-delay: 1s;
 }
 
 video.show {
+  transition: opacity 1s ease;
+  transition-delay: 1s; 
   opacity: 1;
-  /* transform: translateY(-50%); */
-}
+  /* transform: translateY(-50%); */ }
 
 /* CHART STYLING ***************************************************************************************/
 canvas#frequency-chart {
@@ -38,32 +36,26 @@ canvas#frequency-chart {
   margin: 0 auto;
   top: 50%;
   transform: translateY(-50%);
-  transition: opacity 1s ease;
-}
+  transition: opacity 1s ease; }
 
 canvas#frequency-chart.hide {
   opacity: 0;
-  /* transform: translateY(100vw); */
-}
+  /* transform: translateY(100vw); */ }
 
 /* SNAPSHOT CANVAS STYLING ********************************************************************************/
 canvas#snapshot-canvas {
   position: fixed;
   top: 100vh;
-  left: 0;
+  left: 0; 
 }
 
 /* BACKGROUND STYLING **********************************************************************************/
-
-// Background Gradient
-
 body {
-    margin: 0;
-    background: linear-gradient(to top left, #292A48 20%,  #392061 50%, #29335C);
-    height: 100vh;
-    width: 100vw;
-    overflow: hidden;
-  }
+  margin: 0;
+  background: linear-gradient(to top left, #292A48 20%, #392061 50%, #29335C);
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden; }
 
 // little Stars
 
@@ -114,7 +106,7 @@ body {
       $framesName: "move-star-" + $i;
       $scaleAnimationName: "scale-star-" + $i;
       $scaleDelay: random(5000) + ms;
-      $moveDuration: 5000 + random(10000) + ms;
+      $moveDuration: 15000 + random(10000) + ms;
       $delayDuration: random(20000) + ms;
       transform: translate(#{- ($circleSize + 10) + px}, #{random(100) + vh});
 
@@ -182,7 +174,7 @@ $primary_colors: #A135D8 #B13CC8 #7C72A0 #D562C7 #BD369D #7022B6 #D15BB1 #8E39A0
 
       $endPositionX: random(30) + 100;
       $framesName: "move-bokeh-" + $i;
-      $moveDuration: 15000 + random(10000) + ms;
+      $moveDuration: 25000 + random(10000) + ms;
       $delayDuration: random(20000) + ms;
 
       animation: #{$framesName} $moveDuration linear $delayDuration infinite;
