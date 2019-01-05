@@ -127,7 +127,7 @@ async function emitSensorData(io) {
         try {
             // erstelle `potentiometer` Hardwareinstanz.
             // [{ pin: 'A0' }, { pin: 'A1' }, { pin: 'A2' }, { pin: 'A3' }, { pin: 'A4' }]
-            var sensors = new five.Sensors([{ pin: 'A0', freq: 40 }, { pin: 'A1', freq: 40 }]);
+            var sensors = new five.Sensors([{ pin: 'A0', freq: 45 }, { pin: 'A1', freq: 45 }]);
             let i = 0;
 
             // Für jeden Sensor in der Collection werden Daten empfangen, bearbeitet und zum Webserver gesendet
@@ -136,17 +136,33 @@ async function emitSensorData(io) {
                 var s = "pot" + i;
                 var p = 'var s = console.draft()';
                 eval(p);
-
+                // let valueCounter = 0
+                // let valueArray = [];
+                // let arrAvg = 0;
                 // Sofern sich die Werte ändern soll an den Webserver gesendet werden
                 sensor.on("data", function () {
                     // Skaliere ankommende Werte auf einen Bereich von -1 und 1
-                    let v = this.fscaleTo([-1, 1]);
-                    v = v.toFixed(3);
-                    // Sende die Skalierten Werte an den Webserver
-                    io.sockets.emit("pot" + this.pin, v);
-                    // Update der Dynamischen Variable mit den Sensor Werte für den jeweiligen Sensor
-                    var o = 's("Pot", this.pin+":", v)';
-                    eval(o);
+                    // let v = this.fscaleTo([-1, 1]);
+                    v = this.value;
+                    // if (valueCounter <= 44) {
+                    //     valueArray[valueCounter] = parseFloat(v);
+                    //     // console.log(valueCounter);
+                    //     valueCounter++;
+                        
+                    // } else {
+                        // valueCounter = 0;
+                        // // console.log(valueArray);
+                        // arrAvg = valueArray.reduce((a,b) => a + b, 0) / valueArray.length;
+                        // valueArray = [];
+
+                        // arrAvg = arrAvg.toFixed(4)
+
+                        // Sende die Skalierten Werte an den Webserver
+                        io.sockets.emit("pot" + this.pin, v);
+                        // Update der Dynamischen Variable mit den Sensor Werte für den jeweiligen Sensor
+                        var o = 's("Pot", this.pin+":", v)';
+                        eval(o);
+                    // }
                 });
                 i++;
             });

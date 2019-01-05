@@ -8,18 +8,30 @@ let video;
 
 function showCam(video) {
     $("canvas#frequency-chart").addClass("hide");
-    $("video").addClass("show");
-    clearInterval(differenceInterval);
+    
+    setTimeout(function(){
+        $('.logo').addClass('fadeIn');
 
-    snapshot(video);
+        setTimeout(function(){
+            $(".logo").addClass("vanishOut");
+
+            $("video").addClass("show");
+
+            setTimeout(function(){
+                $(".logo").removeClass("fadeIn vanishOut");
+            }, 2000);
+            
+        }, 3000);
+    }, 1000);
 
     // let snapshotInterval = setInterval(function () {
     //     snapshot(video);
     // }, 1000);
 
-    // setTimeout(function(){
-    //     clearInterval(snapshotInterval);
-    // }, 4000);
+    setTimeout(function(){
+        snapshot(video);
+        //  clearInterval(snapshotInterval);
+    }, 1000);
 
      setTimeout(function(){
         hideCam();
@@ -27,10 +39,11 @@ function showCam(video) {
 }
 
 function hideCam() {
-    $("canvas#frequency-chart").removeClass("hide");
     $("video").removeClass("show");
-    movedOne = false;
-    movedTwo = false;
+
+    setTimeout(function(){
+        $("canvas#frequency-chart").removeClass("hide");
+    }, 2000);
     setDifferenceInterval();
 }
 
@@ -39,7 +52,9 @@ function snapshot(video) {
     canvas = document.getElementById("snapshot-canvas");
     ctx = canvas.getContext('2d');
     // Draws current image from the video element into the canvas
+    ctx.filter = "grayscale(1)";
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    
     saveImage();
 }
 
@@ -67,15 +82,19 @@ function setDifferenceInterval() {
         if (movedOne || movedTwo) {
             if (parseFloat(chartTwoValue) >= (parseFloat(chartOneValue) - 0.1) && parseFloat(chartTwoValue) <= (parseFloat(chartOneValue) + 0.1)) {
                 equalCounter++;
-                console.log(equalCounter);
+
+                $(".progress-container").text(equalCounter+" %");
             } else {
+                $(".progress-container").text("0 %");
                 equalCounter = 0;
             }
         }
 
         if (equalCounter >= 100) {
             equalCounter = 0;
-            showCam(video);
+            movedOne = false;
+            movedTwo = false;
+            //showCam(video);
         }
 
     }, 100);
@@ -133,14 +152,14 @@ $(document).ready(function () {
                 // backgroundColor: "rgba(230,0,255,0.1)",
                 borderColor : "rgba(230,0,255,0.1)",
                 backgroundColor: "transparent",
-                borderWidth: 30,
+                borderWidth: 20,
                 data: []
             },{
                 label: "",
                 // backgroundColor: "rgba(243, 147, 36, 0.1)",
                 borderColor: "rgba(243, 147, 36, 0.1)",
                 backgroundColor: "transparent",
-                borderWidth: 30,
+                borderWidth: 20,
                 data: []
             }]
         },
@@ -155,7 +174,6 @@ $(document).ready(function () {
                 },
                 line: {
                     tension: 0, // disables bezier curves
-                    //cubicInterpolationMode: 'default',
                 }
             },
             scales: {
@@ -168,9 +186,9 @@ $(document).ready(function () {
                 yAxes: [{
                     display: false,
                     ticks: {
-                        max: 0.5,
-                        min: -0.5,
-                        stepSize: 0.2,
+                        // max: 0.5,
+                        // min: -0.5,
+                        // stepSize: 0.5,
                     },
                     gridLines: {
                         display: false
@@ -184,7 +202,7 @@ $(document).ready(function () {
 
     async function getFirstSensor() {
         socket.on("pot0", async function (message) {
-            message = parseFloat(message);
+            message = parseFloat(message);// - 0.013;
             chartOneValue = message;
 
             if (message > 0.15 || message < (-0.15) && movedOne == false) {
@@ -201,13 +219,13 @@ $(document).ready(function () {
                 myLineChart.data.labels.shift();
             }
 
-            myLineChart.update(10);
+            myLineChart.update(45);
         });
     }
 
     async function getSecondSensor() {
         socket.on("pot1", async function (message) {
-            message = parseFloat(message) * (-1.000);
+            message = parseFloat(message) * (-1.0000);
             chartTwoValue = message;
             if (message > 0.15 || message < (-0.15) && movedTwo == false) {
                 movedTwo = true;
@@ -221,7 +239,7 @@ $(document).ready(function () {
                 myLineChart.data.datasets[3].data.shift();
             }
 
-            myLineChart.update(10);
+            myLineChart.update(45);
         });
     }
 
