@@ -142,21 +142,11 @@ async function emitSensorData(io) {
                 // Sofern sich die Werte ändern soll an den Webserver gesendet werden
                 sensor.on("data", function () {
                     // Skaliere ankommende Werte auf einen Bereich von -1 und 1
-                    // let v = this.fscaleTo([-1, 1]);
-                    v = this.value;
-                    // if (valueCounter <= 44) {
-                    //     valueArray[valueCounter] = parseFloat(v);
-                    //     // console.log(valueCounter);
-                    //     valueCounter++;
-                        
-                    // } else {
-                        // valueCounter = 0;
-                        // // console.log(valueArray);
-                        // arrAvg = valueArray.reduce((a,b) => a + b, 0) / valueArray.length;
-                        // valueArray = [];
-
-                        // arrAvg = arrAvg.toFixed(4)
-
+                    let v = this.fscaleTo([-1, 1]);
+                    v = v.toFixed(3)
+                    // let v = this.scaleTo([-512,512]);
+                    // v = Math.ceil(v / 10 ) * 10;
+                    // v = v.toFixed(4);
                         // Sende die Skalierten Werte an den Webserver
                         io.sockets.emit("pot" + this.pin, v);
                         // Update der Dynamischen Variable mit den Sensor Werte für den jeweiligen Sensor

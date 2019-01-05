@@ -4,21 +4,37 @@ let chartOneValue = 0.00;
 let chartTwoValue = 0.00;
 let equalCounter = 0;
 let differenceInterval;
-let video;
+let video = null;
 
-function showCam(video) {
+function showCam() {
+    clearInterval(differenceInterval);
     $("canvas#frequency-chart").addClass("hide");
     
     setTimeout(function(){
-        $('.logo').addClass('fadeIn');
+        $('.match-icon').addClass('match');
+        $(".progress-container").fadeOut();
+
+        //implement WebCam code
+        video = document.getElementById("webcam-video");
+
+        if (navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({audio: false, video: {width: 1920, height: 1080} })
+                .then(function (stream) {
+                    video.srcObject = stream;
+                })
+                .catch(function (error) {
+                    //console.log("Somethin went wrong");
+                });
+        }
 
         setTimeout(function(){
-            $(".logo").addClass("vanishOut");
+            $(".match-icon").addClass("vanishOut");
 
             $("video").addClass("show");
 
             setTimeout(function(){
-                $(".logo").removeClass("fadeIn vanishOut");
+                $(".match-icon").removeClass("match vanishOut");
+                $(".match-icon").hide();
             }, 2000);
             
         }, 3000);
@@ -43,8 +59,19 @@ function hideCam() {
 
     setTimeout(function(){
         $("canvas#frequency-chart").removeClass("hide");
+        video = null;
+        $(".progress-bar").css("width", "0%");
+
+        setTimeout(function(){
+            $(".progress-container").fadeIn();
+            $(".match-icon").fadeIn();
+        }, 500);
+        
+        setTimeout(function(){
+            equalCounter = 0;
+            setDifferenceInterval();
+        }, 1000);   
     }, 2000);
-    setDifferenceInterval();
 }
 
 function snapshot(video) {
@@ -82,19 +109,18 @@ function setDifferenceInterval() {
         if (movedOne || movedTwo) {
             if (parseFloat(chartTwoValue) >= (parseFloat(chartOneValue) - 0.1) && parseFloat(chartTwoValue) <= (parseFloat(chartOneValue) + 0.1)) {
                 equalCounter++;
-
-                $(".progress-container").text(equalCounter+" %");
+                // console.log(equalCounter);
+                $(".progress-bar").css("width",  equalCounter+"%");
             } else {
-                $(".progress-container").text("0 %");
                 equalCounter = 0;
             }
         }
 
         if (equalCounter >= 100) {
-            equalCounter = 0;
+            $(".progress-bar").css("width", "100%");
             movedOne = false;
             movedTwo = false;
-            //showCam(video);
+            showCam();
         }
 
     }, 100);
@@ -109,21 +135,6 @@ $(document).ready(function () {
 
     for (let index = 0; index < 25; index++) {
         $('.bokeh-container').append('<div></div>');
-    }
-
-
-
-    //implement WebCam code
-    video = document.getElementById("webcam-video");
-
-    if (navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia({audio: false, video: {width: 1920, height: 1080} })
-            .then(function (stream) {
-                video.srcObject = stream;
-            })
-            .catch(function (error) {
-                //console.log("Somethin went wrong");
-            });
     }
 
 
@@ -184,10 +195,10 @@ $(document).ready(function () {
                     }
                 }],
                 yAxes: [{
-                    display: false,
+                    display: true,
                     ticks: {
-                        // max: 0.5,
-                        // min: -0.5,
+                        max: 0.4,
+                        min: -0.4,
                         // stepSize: 0.5,
                     },
                     gridLines: {
@@ -202,7 +213,7 @@ $(document).ready(function () {
 
     async function getFirstSensor() {
         socket.on("pot0", async function (message) {
-            message = parseFloat(message);// - 0.013;
+            message = parseFloat(message);
             chartOneValue = message;
 
             if (message > 0.15 || message < (-0.15) && movedOne == false) {
@@ -213,13 +224,13 @@ $(document).ready(function () {
             myLineChart.data.datasets[0].data.push(message);
             myLineChart.data.datasets[2].data.push(message);
 
-            if (myLineChart.data.datasets[0].data.length > 150) {
+            if (myLineChart.data.datasets[0].data.length > 100) {
                 myLineChart.data.datasets[0].data.shift();
                 myLineChart.data.datasets[2].data.shift();
                 myLineChart.data.labels.shift();
             }
 
-            myLineChart.update(45);
+            myLineChart.update(10);
         });
     }
 
@@ -234,12 +245,12 @@ $(document).ready(function () {
             myLineChart.data.datasets[1].data.push(message);
             myLineChart.data.datasets[3].data.push(message);
 
-            if (myLineChart.data.datasets[1].data.length > 150) {
+            if (myLineChart.data.datasets[1].data.length > 100) {
                 myLineChart.data.datasets[1].data.shift();
                 myLineChart.data.datasets[3].data.shift();
             }
 
-            myLineChart.update(45);
+            myLineChart.update(10);
         });
     }
 
