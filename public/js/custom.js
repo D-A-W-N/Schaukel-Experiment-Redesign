@@ -14,19 +14,6 @@ function showCam() {
         $('.match-icon').addClass('match');
         $(".progress-container").fadeOut();
 
-        //implement WebCam code
-        video = document.getElementById("webcam-video");
-
-        if (navigator.mediaDevices.getUserMedia) {
-            navigator.mediaDevices.getUserMedia({audio: false, video: {width: 1920, height: 1080} })
-                .then(function (stream) {
-                    video.srcObject = stream;
-                })
-                .catch(function (error) {
-                    //console.log("Somethin went wrong");
-                });
-        }
-
         setTimeout(function(){
             $(".match-icon").addClass("vanishOut");
 
@@ -45,7 +32,7 @@ function showCam() {
     // }, 1000);
 
     setTimeout(function(){
-        snapshot(video);
+        snapshot();
         //  clearInterval(snapshotInterval);
     }, 1000);
 
@@ -59,7 +46,6 @@ function hideCam() {
 
     setTimeout(function(){
         $("canvas#frequency-chart").removeClass("hide");
-        video = null;
         $(".progress-bar").css("width", "0%");
 
         setTimeout(function(){
@@ -74,7 +60,7 @@ function hideCam() {
     }, 2000);
 }
 
-function snapshot(video) {
+function snapshot() {
     let canvas, ctx;
     canvas = document.getElementById("snapshot-canvas");
     ctx = canvas.getContext('2d');
@@ -137,7 +123,18 @@ $(document).ready(function () {
         $('.bokeh-container').append('<div></div>');
     }
 
+    //implement WebCam code
+    video = document.getElementById("webcam-video");
 
+    if (navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({audio: false, video: {width: 1920, height: 1080} })
+            .then(function (stream) {
+                video.srcObject = stream;
+            })
+            .catch(function (error) {
+                //console.log("Somethin went wrong");
+            });
+    }
 
     let ctx = document.getElementById('frequency-chart');
     let myLineChart = new Chart(ctx, {
@@ -213,7 +210,7 @@ $(document).ready(function () {
 
     async function getFirstSensor() {
         socket.on("pot0", async function (message) {
-            message = parseFloat(message);
+            message = parseFloat(message);// + 0.005;
             chartOneValue = message;
 
             if (message > 0.15 || message < (-0.15) && movedOne == false) {
@@ -230,13 +227,13 @@ $(document).ready(function () {
                 myLineChart.data.labels.shift();
             }
 
-            myLineChart.update(10);
+            myLineChart.update(0);
         });
     }
 
     async function getSecondSensor() {
         socket.on("pot1", async function (message) {
-            message = parseFloat(message) * (-1.0000);
+            message = parseFloat(message) * (-1.0000); //+ 0.078 ;
             chartTwoValue = message;
             if (message > 0.15 || message < (-0.15) && movedTwo == false) {
                 movedTwo = true;
@@ -250,7 +247,7 @@ $(document).ready(function () {
                 myLineChart.data.datasets[3].data.shift();
             }
 
-            myLineChart.update(10);
+            myLineChart.update(0);
         });
     }
 
