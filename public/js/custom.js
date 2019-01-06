@@ -6,11 +6,13 @@ let equalCounter = 0;
 let differenceInterval;
 let video = null;
 
+let socket = io();
+
 function showCam() {
     clearInterval(differenceInterval);
     $("canvas#frequency-chart").addClass("hide");
-    
-    setTimeout(function(){
+
+    setTimeout(function () {
         $('.match-icon').addClass('match');
         $(".progress-container").fadeOut();
 
@@ -19,11 +21,11 @@ function showCam() {
 
             $("video").addClass("show");
 
-            setTimeout(function(){
+            setTimeout(function () {
                 $(".match-icon").removeClass("match vanishOut");
                 $(".match-icon").hide();
             }, 2000);
-            
+
         }, 3000);
     }, 1000);
 
@@ -36,7 +38,7 @@ function showCam() {
         //  clearInterval(snapshotInterval);
     }, 1000);
 
-     setTimeout(function(){
+    setTimeout(function () {
         hideCam();
     }, 10000);
 }
@@ -44,19 +46,19 @@ function showCam() {
 function hideCam() {
     $("video").removeClass("show");
 
-    setTimeout(function(){
+    setTimeout(function () {
         $("canvas#frequency-chart").removeClass("hide");
         $(".progress-bar").css("width", "0%");
 
-        setTimeout(function(){
+        setTimeout(function () {
             $(".progress-container").fadeIn();
             $(".match-icon").fadeIn();
         }, 500);
-        
-        setTimeout(function(){
+
+        setTimeout(function () {
             equalCounter = 0;
             setDifferenceInterval();
-        }, 1000);   
+        }, 1000);
     }, 2000);
 }
 
@@ -67,7 +69,7 @@ function snapshot() {
     // Draws current image from the video element into the canvas
     ctx.filter = "grayscale(1)";
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-    
+
     saveImage();
 }
 
@@ -96,13 +98,16 @@ function setDifferenceInterval() {
             if (parseFloat(chartTwoValue) >= (parseFloat(chartOneValue) - 0.1) && parseFloat(chartTwoValue) <= (parseFloat(chartOneValue) + 0.1)) {
                 equalCounter++;
                 // console.log(equalCounter);
-                $(".progress-bar").css("width",  equalCounter+"%");
+                $(".progress-bar").css("width", equalCounter + "%");
+
             } else {
                 equalCounter = 0;
             }
+            socket.emit('equalCounter', equalCounter);
         }
 
         if (equalCounter >= 100) {
+            socket.emit('equalCounter', 100);
             $(".progress-bar").css("width", "100%");
             movedOne = false;
             movedTwo = false;
@@ -144,7 +149,7 @@ $(document).ready(function () {
             datasets: [{
                 label: "",
                 // backgroundColor: "rgba(230,0,255,0.1)",
-                borderColor : "rgba(230,0,255,1)",
+                borderColor: "rgba(230,0,255,1)",
                 backgroundColor: "transparent",
                 borderWidth: 5,
                 data: []
@@ -155,14 +160,14 @@ $(document).ready(function () {
                 backgroundColor: "transparent",
                 borderWidth: 5,
                 data: []
-            },{
+            }, {
                 label: "",
                 // backgroundColor: "rgba(230,0,255,0.1)",
-                borderColor : "rgba(230,0,255,0.1)",
+                borderColor: "rgba(230,0,255,0.1)",
                 backgroundColor: "transparent",
                 borderWidth: 20,
                 data: []
-            },{
+            }, {
                 label: "",
                 // backgroundColor: "rgba(243, 147, 36, 0.1)",
                 borderColor: "rgba(243, 147, 36, 0.1)",
@@ -206,7 +211,7 @@ $(document).ready(function () {
         }
     });
 
-    let socket = io();
+
 
     async function getFirstSensor() {
         socket.on("pot0", async function (message) {

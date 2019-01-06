@@ -147,11 +147,11 @@ async function emitSensorData(io) {
                     // let v = this.scaleTo([-512,512]);
                     // v = Math.ceil(v / 10 ) * 10;
                     // v = v.toFixed(4);
-                        // Sende die Skalierten Werte an den Webserver
-                        io.sockets.emit("pot" + this.pin, v);
-                        // Update der Dynamischen Variable mit den Sensor Werte für den jeweiligen Sensor
-                        var o = 's("Pot", this.pin+":", v)';
-                        eval(o);
+                    // Sende die Skalierten Werte an den Webserver
+                    io.sockets.emit("pot" + this.pin, v);
+                    // Update der Dynamischen Variable mit den Sensor Werte für den jeweiligen Sensor
+                    var o = 's("Pot", this.pin+":", v)';
+                    eval(o);
                     // }
                 });
                 i++;
@@ -182,16 +182,23 @@ async function emitDummyData(io) {
             if (index == max) { increase = false; } else { increase = true; }
             if (increase === true) { index += 0.05; } else { index -= 0.05; }
 
-            io.sockets.emit('pot0',  0.40 * Math.sin(index));
+            io.sockets.emit('pot0', 0.40 * Math.sin(index));
             p1('[DUMMYDATA]', 'Pot 1:', 0.40 * Math.sin(index));
 
-            io.sockets.emit('pot1',  0.40 * Math.sin(index) + 0.05);
-            p2('[DUMMYDATA]', 'Pot 2:', 0.40 * Math.sin(index) + 0.05);
+            io.sockets.emit('pot1', 0.40 * Math.sin((index * -1)) + 0.05);
+            p2('[DUMMYDATA]', 'Pot 2:', 0.40 * Math.sin((index * -1)) + 0.05);
         } catch (err) {
             message('[DUMMYDATA]', "::ERROR::", err.code, err.message);
         }
     }, 40);
 
+}
+
+// Input progess goes from 0 to 100
+function ProgressBar(progress) {
+    // Make it 50 characters length
+    var units = Math.round(progress / 2)
+    return '[' + '='.repeat(units) + ' '.repeat(50 - units) + '] ' + progress + '%'
 }
 
 // Init Webserver
@@ -237,6 +244,18 @@ async function checkforBrowser(io) {
                 socket.on('disconnect', () => {
                     message('[BROWSER]', 'Disconnected');
                 });
+
+                // Display a Match Progressbar
+                var barLine = console.draft('[MATCHCOUNT]', 'Wait for Action...');
+                socket.on('equalCounter', async function (equalCounter) {
+                    if (equalCounter == 100) {
+                        barLine('[MATCHCOUNT]', 'A MATCH!')
+                    } else {
+                        barLine('[MATCHCOUNT]', ProgressBar(equalCounter))
+                    }
+
+                });
+
                 resolve(true);
             });
         } catch (err) {
