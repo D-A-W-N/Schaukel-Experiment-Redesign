@@ -29,13 +29,8 @@ function showCam() {
         }, 3000);
     }, 1000);
 
-    // let snapshotInterval = setInterval(function () {
-    //     snapshot(video);
-    // }, 1000);
-
     setTimeout(function(){
         snapshot();
-        //  clearInterval(snapshotInterval);
     }, 1000);
 
     setTimeout(function () {
@@ -102,6 +97,7 @@ function setDifferenceInterval() {
 
             } else {
                 equalCounter = 0;
+                $(".progress-bar").css("width", "0%");
             }
             socket.emit('equalCounter', equalCounter);
         }
