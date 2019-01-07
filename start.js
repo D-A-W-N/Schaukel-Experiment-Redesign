@@ -32,6 +32,9 @@ const express = require('express')
 // Socket.IO is a library that enables real-time, bidirectional and event-based communication between the browser and the server. 
 const socketio = require('socket.io')
 
+// global Socket Variable
+let socket;
+
 /**
 * Johnny-Five
 * The JavaScript Robotics Programming Framework
@@ -47,7 +50,7 @@ const five = require("johnny-five");
 
 // Mithilfe von Serialport sämtliche angeschlossenen Ports finden und nach Adruino Kennzeichnung suchen
 async function getPort() {
-    var message = console.draft();
+    var message = console.draft('[PORT]', `Looking for suitable Ports...`);
 
     return new Promise((resolve, reject) => {
         try {
@@ -86,7 +89,7 @@ async function getPort() {
 
 // Verbindung zum Adruino mit Hilfe des ermittelten Ports aufbauen
 async function connectBoard(port) {
-    var message = console.draft();
+    var message = console.draft('[Board]', "Connect to the board...");
     return new Promise((resolve, reject) => {
         try {
             // Versuche die Verbindung  zum Adruino herzustellen
@@ -203,7 +206,7 @@ function ProgressBar(progress) {
 
 // Init Webserver
 async function initWebserver() {
-    var message = console.draft();
+    var message = console.draft('[WEBSERVER]', `Initialize Webserver...`);
     return new Promise((resolve, reject) => {
         // Create app instance
         const app = new express();
@@ -238,22 +241,12 @@ async function checkforBrowser(io) {
     return new Promise((resolve, reject) => {
         try {
             // Wenn eine Socketverbindung hergestellt wurde ist das ein Indikator dafür das der Browser die Seite geöffnet hat
-            io.on('connection', function (socket) {
+            io.on('connection', function (s) {
+                socket = s;
                 message('[BROWSER]', 'Connected.')
                 // Aktualisiere Meldung wenn Browser geschlossen wird
-                socket.on('disconnect', () => {
+                s.on('disconnect', () => {
                     message('[BROWSER]', 'Disconnected');
-                });
-
-                // Display a Match Progressbar
-                var barLine = console.draft('[MATCHCOUNT]', 'Wait for Action...');
-                socket.on('equalCounter', async function (equalCounter) {
-                    if (equalCounter == 100) {
-                        barLine('[MATCHCOUNT]', 'A MATCH!')
-                    } else {
-                        barLine('[MATCHCOUNT]', ProgressBar(equalCounter))
-                    }
-
                 });
 
                 resolve(true);
@@ -263,6 +256,24 @@ async function checkforBrowser(io) {
             return reject(false);
         }
     });
+}
+
+// Check for Browser is Connected to Webserver
+async function getMatchBar(io) {
+    var barLine = console.draft('[MATCHCOUNT]', 'Wait for Data...');
+        try {
+                // Display a Match Progressbar
+                socket.on('equalCounter', function (equalCounter) {
+                    if (equalCounter == 100) {
+                        barLine('[MATCHCOUNT]', 'A MATCH!')
+                    } else {
+                        barLine('[MATCHCOUNT]', ProgressBar(equalCounter))
+                    }
+
+                });
+        } catch (err) {
+            message('[MATCHCOUNT]', "::ERROR::", err.code, err.message);
+        }
 }
 
 // Init all async Tasks
@@ -277,18 +288,18 @@ async function startApp() {
         if (sio) {
             return checkforBrowser(sio);
         }
-    }).then((status) => {
+    }).then(async (status) => {
         if (status) {
             return getPort();
         }
-    }).then((port) => {
+    }).then(async (port) => {
         const waitConnectBoard = connectBoard(port);
         waitConnectBoard.then(() => {
             return emitSensorData(sio);
         });
-    }, (reason) => {
+    },async (reason) => {
         return emitDummyData(sio);
-    }).catch((err) => { message('[APP]', "::ERROR::", err.code, err.message) });
+    }).then(() => getMatchBar(sio)).catch((err) => { message('[APP]', "::ERROR::", err.code, err.message) });
     return
 }
 
