@@ -62,8 +62,16 @@ function snapshot() {
     canvas = document.getElementById("snapshot-canvas");
     ctx = canvas.getContext('2d');
     // Draws current image from the video element into the canvas
+
     ctx.filter = "grayscale(1)";
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    ctx.filter = "grayscale(0)";
+    ctx.fillStyle = "rgb(124, 77, 201, 0.3)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.drawImage(document.getElementById("water-mark"), canvas.width * 0.83, canvas.height * 0.9, canvas.width / 7, canvas.width / 7 / 3.61);
+
+    
 
     saveImage();
 }
@@ -193,10 +201,10 @@ $(document).ready(function () {
                     }
                 }],
                 yAxes: [{
-                    display: true,
+                    display: false,
                     ticks: {
-                        max: 0.4,
-                        min: -0.4,
+                        max: 0.5,
+                        min: -0.5,
                         // stepSize: 0.5,
                     },
                     gridLines: {
