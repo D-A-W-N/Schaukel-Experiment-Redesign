@@ -130,7 +130,7 @@ async function emitSensorData(io) {
         try {
             // erstelle `potentiometer` Hardwareinstanz.
             // [{ pin: 'A0' }, { pin: 'A1' }, { pin: 'A2' }, { pin: 'A3' }, { pin: 'A4' }]
-            var sensors = new five.Sensors([{ pin: 'A0', freq: 40 }, { pin: 'A1', freq: 40 }]);
+            var sensors = new five.Sensors([{ pin: 'A0', freq: 0.5 }, { pin: 'A1', freq: 0.5 }]);
             let i = 0;
 
             // Für jeden Sensor in der Collection werden Daten empfangen, bearbeitet und zum Webserver gesendet
@@ -138,6 +138,9 @@ async function emitSensorData(io) {
                 // Dynamische Variable für die Ausgabe der Sensor Werte im KonsolenDraft
                 var s = "pot" + i;
                 var p = 'var s = console.draft()';
+                let sum = 0;
+                let counter = 0;
+
                 eval(p);
                 // let valueCounter = 0
                 // let valueArray = [];
@@ -146,15 +149,21 @@ async function emitSensorData(io) {
                 sensor.on("data", function () {
                     // Skaliere ankommende Werte auf einen Bereich von -1 und 1
                     let v = this.fscaleTo([-1, 1]);
-                    // v = v.toFixed(3);
-                    // let v = this.scaleTo([-512,512]);
-                    // v = Math.ceil(v / 10 ) * 10;
-                    // v = v.toFixed(4);
+                    sum += v;
+                    counter++;
+
                     // Sende die Skalierten Werte an den Webserver
-                    io.sockets.emit("pot" + this.pin, v);
-                    // Update der Dynamischen Variable mit den Sensor Werte für den jeweiligen Sensor
-                    var o = 's("Pot", this.pin+":", v)';
-                    eval(o);
+                    if(counter == 89) {
+                        v = sum / 90;
+                        v = v.toFixed(4);
+                        io.sockets.emit("pot" + this.pin, v);
+                        // Update der Dynamischen Variable mit den Sensor Werte für den jeweiligen Sensor
+                        var o = 's("Pot", this.pin+":", v)';
+                        eval(o);
+                        sum = 0;
+                        counter = 0;
+                    }
+
                     // }
                 });
                 i++;
