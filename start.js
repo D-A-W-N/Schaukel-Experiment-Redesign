@@ -130,7 +130,7 @@ async function emitSensorData(io) {
         try {
             // erstelle `potentiometer` Hardwareinstanz.
             // [{ pin: 'A0' }, { pin: 'A1' }, { pin: 'A2' }, { pin: 'A3' }, { pin: 'A4' }]
-            var sensors = new five.Sensors([{ pin: 'A0', freq: 0.5 }, { pin: 'A1', freq: 0.5 }]);
+            var sensors = new five.Sensors([{ pin: 'A0', freq: 1 }, { pin: 'A1', freq: 1 }]);
             let i = 0;
 
             // Für jeden Sensor in der Collection werden Daten empfangen, bearbeitet und zum Webserver gesendet
@@ -153,8 +153,8 @@ async function emitSensorData(io) {
                     counter++;
 
                     // Sende die Skalierten Werte an den Webserver
-                    if(counter == 89) {
-                        v = sum / 90;
+                    if(counter == 44) {
+                        v = sum / 45;
                         v = v.toFixed(4);
                         io.sockets.emit("pot" + this.pin, v);
                         // Update der Dynamischen Variable mit den Sensor Werte für den jeweiligen Sensor
