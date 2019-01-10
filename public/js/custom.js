@@ -205,8 +205,8 @@ $(document).ready(function () {
                 yAxes: [{
                     display: true,
                     ticks: {
-                        max: 0.4,
-                        min: -0.4,
+                        max: .35,
+                        min: -.35,
                         // stepSize: 0.5,
                     },
                     gridLines: {
