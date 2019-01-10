@@ -52,9 +52,9 @@
 #include "Filter.h"
 
 // Create a new exponential filter with a weight of 5 and an initial value of 0. 
-ExponentialFilter<long> Pot1(2, 0);
+ExponentialFilter<long> Pot1(5, 0);
 // Create a new exponential filter with a weight of 5 and an initial value of 0. 
-ExponentialFilter<long> Pot2(2, 0);
+ExponentialFilter<long> Pot2(5, 0);
 
 // In order to use software serial, you will need to compile this sketch with
 // Arduino IDE v1.6.6 or higher. Hardware serial should work back to Arduino 1.0.
