@@ -156,7 +156,7 @@ async function emitSensorData(io) {
                     if(counter == 2) {
                         v = sum / 3;
                         v = v.toFixed(4);
-                        io.sockets.emit("pot" + this.pin, v);
+                        io.sockets.emit("pot" + this.pin, v * (-1.0));
                         // Update der Dynamischen Variable mit den Sensor Werte für den jeweiligen Sensor
                         var o = 's("Pot", this.pin+":", v)';
                         eval(o);
@@ -194,11 +194,11 @@ async function emitDummyData(io) {
             if (index == max) { increase = false; } else { increase = true; }
             if (increase === true) { index += 0.05; } else { index -= 0.05; }
 
-            io.sockets.emit('pot0', 0.40 * Math.sin(index));
-            p1('[DUMMYDATA]', 'Pot 1:', 0.40 * Math.sin(index));
+            io.sockets.emit('pot0', 0.3 * Math.sin(index));
+            p1('[DUMMYDATA]', 'Pot 1:', 0.3 * Math.sin(index));
 
-            io.sockets.emit('pot1', 0.40 * Math.sin((index * -1)) + 0.05);
-            p2('[DUMMYDATA]', 'Pot 2:', 0.40 * Math.sin((index * -1)) + 0.05);
+            io.sockets.emit('pot1', 0.33 * Math.sin((index)));
+            p2('[DUMMYDATA]', 'Pot 2:', 0.33 * Math.sin((index)));
         } catch (err) {
             message('[DUMMYDATA]', "::ERROR::", err.code, err.message);
         }

@@ -12,6 +12,8 @@ function showCam() {
     clearInterval(differenceInterval);
     $("canvas#frequency-chart").addClass("hide");
 
+    snapshot();
+
     setTimeout(function () {
         $('.match-icon').addClass('match');
         $(".progress-container").fadeOut();
@@ -28,11 +30,7 @@ function showCam() {
 
         }, 3000);
     }, 1000);
-
-    setTimeout(function(){
-        snapshot();
-    }, 1000);
-
+    
     setTimeout(function () {
         hideCam();
     }, 10000);
@@ -66,12 +64,10 @@ function snapshot() {
     ctx.filter = "grayscale(1)";
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
     ctx.filter = "grayscale(0)";
-    ctx.fillStyle = "rgb(124, 77, 201, 0.3)";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // ctx.fillStyle = "rgb(124, 77, 201, 0.3)";
+    // ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     ctx.drawImage(document.getElementById("water-mark"), canvas.width * 0.83, canvas.height * 0.9, canvas.width / 7, canvas.width / 7 / 3.61);
-
-    
 
     saveImage();
 }
@@ -100,7 +96,6 @@ function setDifferenceInterval() {
         if (movedOne || movedTwo) {
             if (parseFloat(chartTwoValue) >= (parseFloat(chartOneValue) - 0.1) && parseFloat(chartTwoValue) <= (parseFloat(chartOneValue) + 0.1)) {
                 equalCounter++;
-                // console.log(equalCounter);
                 $(".progress-bar").css("width", equalCounter + "%");
 
             } else {
@@ -114,9 +109,9 @@ function setDifferenceInterval() {
             socket.emit('equalCounter', 100);
             $(".progress-bar").css("width", "100%");
             
-            if(chartOneValue >= 0.05) {
+            if(chartOneValue >= 0.0 && chartOneValue <= 0.2) {
                 movedOne = false;
-            movedTwo = false;
+                movedTwo = false;
                 showCam();
             }
         }
@@ -222,10 +217,10 @@ $(document).ready(function () {
 
     async function getFirstSensor() {
         socket.on("pot0", async function (message) {
-            message = parseFloat(message) * (-1.000);// + 0.005;
+            message = parseFloat(message);
             chartOneValue = message;
 
-            if (message > 0.15 || message < (-0.15) && movedOne == false) {
+            if (message > 0.10 || message < (-0.10) && movedOne == false) {
                 movedOne = true;
             }
 
@@ -245,9 +240,9 @@ $(document).ready(function () {
 
     async function getSecondSensor() {
         socket.on("pot1", async function (message) {
-            message = parseFloat(message) * (-1.0000); //+ 0.078 ;
+            message = parseFloat(message);
             chartTwoValue = message;
-            if (message > 0.15 || message < (-0.15) && movedTwo == false) {
+            if (message > 0.10 || message < (-0.10) && movedTwo == false) {
                 movedTwo = true;
             }
 
