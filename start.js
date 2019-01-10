@@ -264,7 +264,7 @@ async function getMatchBar(io) {
         try {
                 // Display a Match Progressbar
                 socket.on('equalCounter', function (equalCounter) {
-                    if (equalCounter == 100) {
+                    if (equalCounter >= 100) {
                         barLine('[MATCHCOUNT]', 'A MATCH!')
                     } else {
                         barLine('[MATCHCOUNT]', ProgressBar(equalCounter))

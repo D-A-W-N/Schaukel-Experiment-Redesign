@@ -115,7 +115,9 @@ function setDifferenceInterval() {
             $(".progress-bar").css("width", "100%");
             movedOne = false;
             movedTwo = false;
-            showCam();
+            if(chartOneValue >= 0.2) {
+                showCam();
+            }
         }
 
     }, 100);
@@ -201,10 +203,10 @@ $(document).ready(function () {
                     }
                 }],
                 yAxes: [{
-                    display: false,
+                    display: true,
                     ticks: {
-                        max: 0.5,
-                        min: -0.5,
+                        max: 0.4,
+                        min: -0.4,
                         // stepSize: 0.5,
                     },
                     gridLines: {
@@ -219,7 +221,7 @@ $(document).ready(function () {
 
     async function getFirstSensor() {
         socket.on("pot0", async function (message) {
-            message = parseFloat(message);// + 0.005;
+            message = parseFloat(message) * (-1.000);// + 0.005;
             chartOneValue = message;
 
             if (message > 0.15 || message < (-0.15) && movedOne == false) {
@@ -242,7 +244,7 @@ $(document).ready(function () {
 
     async function getSecondSensor() {
         socket.on("pot1", async function (message) {
-            message = parseFloat(message) * (-1.0000); //+ 0.078 ;
+            message = parseFloat(message);// * (-1.0000); //+ 0.078 ;
             chartTwoValue = message;
             if (message > 0.15 || message < (-0.15) && movedTwo == false) {
                 movedTwo = true;
