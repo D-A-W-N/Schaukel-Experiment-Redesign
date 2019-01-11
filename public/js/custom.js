@@ -110,11 +110,11 @@ function setDifferenceInterval() {
             socket.emit('equalCounter', 100);
             $(".progress-bar").css("width", "100%");
             
-            if((chartOneValue >= 0.1 && chartOneValue <= 0.2) && (chartTwoValue >= 0.1 && chartTwoValue <= 0.2)) {
+            if((chartOneValue >= 0.05 && chartOneValue <= 0.2) && (chartTwoValue >= 0.05 && chartTwoValue <= 0.2)) {
                 movedOne = false;
                 movedTwo = false;
                 showCam();
-            } else if ((chartOneValue < 0.1 && chartOneValue > (-0.1)) && (chartTwoValue < 0.1 && chartTwoValue > (-0.1)) ) {
+            } else if ((chartOneValue < 0.05 && chartOneValue > (-0.05)) && (chartTwoValue < 0.05 && chartTwoValue > (-0.05)) ) {
                 standingCounter++;
 
                 console.log(standingCounter);
@@ -233,7 +233,7 @@ $(document).ready(function () {
             message = parseFloat(message);
             chartOneValue = message;
 
-            if (message > 0.10 || message < (-0.10) && movedOne == false) {
+            if (message > 0.05 || message < (-0.05) && movedOne == false) {
                 movedOne = true;
             }
 
@@ -255,7 +255,7 @@ $(document).ready(function () {
         socket.on("pot1", async function (message) {
             message = parseFloat(message);
             chartTwoValue = message;
-            if (message > 0.10 || message < (-0.10) && movedTwo == false) {
+            if (message > 0.05 || message < (-0.05) && movedTwo == false) {
                 movedTwo = true;
             }
 
