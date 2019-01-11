@@ -153,14 +153,14 @@ $(document).ready(function () {
                 // backgroundColor: "rgba(230,0,255,0.1)",
                 borderColor: "rgba(230,0,255,1)",
                 backgroundColor: "transparent",
-                borderWidth: 5,
+                borderWidth: 8,
                 data: []
             }, {
                 label: "",
                 // backgroundColor: "rgba(243, 147, 36, 0.1)",
                 borderColor: "rgba(243, 147, 36, 1)",
                 backgroundColor: "transparent",
-                borderWidth: 5,
+                borderWidth: 8,
                 data: []
             }, {
                 label: "",
