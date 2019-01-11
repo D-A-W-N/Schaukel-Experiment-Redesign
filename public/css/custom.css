@@ -102,7 +102,7 @@ canvas#snapshot-canvas {
 
 .match-icon.match {
   opacity: 1;
-  transform: translate(-10vw, -50vh) scale(6);
+  transform: translate(-10vw, -50vh) scale(8);
   transition: opacity 1s ease, transform 1s ease;
   animation: pulsate 1s ease;
   animation-delay: 1s;
@@ -110,13 +110,13 @@ canvas#snapshot-canvas {
 
 @keyframes pulsate {
   0% {
-    transform: translate(-10vw, -50vh) scale(6);
-  }
-  30% {
     transform: translate(-10vw, -50vh) scale(8);
   }
+  30% {
+    transform: translate(-10vw, -50vh) scale(10);
+  }
   100% {
-    transform: translate(-10vw, -50vh) scale(6);
+    transform: translate(-10vw, -50vh) scale(8);
   }
 }
 /* Fade Out Animation */
