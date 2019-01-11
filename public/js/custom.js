@@ -118,11 +118,9 @@ function setDifferenceInterval() {
             } else if ((chartOneValue < 0.05 && chartOneValue > (-0.05)) && (chartTwoValue < 0.05 && chartTwoValue > (-0.05)) ) {
                 standingCounter++;
 
-                console.log(standingCounter);
-
                 if(standingCounter >= 50) {
                     $(".progress-bar").css("width", "0%");
-                    chartOneCorrection = 0 - (chartOneValue);
+                    chartOneCorrection = 0 - (chartOneValue) + 0.02;
                     chartTwoCorrection = 0 - (chartTwoValue);
                     movedOne = false;
                     movedTwo = false;
