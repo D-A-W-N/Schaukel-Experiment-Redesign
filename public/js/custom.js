@@ -110,12 +110,14 @@ function setDifferenceInterval() {
             socket.emit('equalCounter', 100);
             $(".progress-bar").css("width", "100%");
             
-            if(chartOneValue >= 0.1 && chartOneValue <= 0.2 || chartTwoValue >= 0.1 && chartTwoValue <= 0.2) {
+            if((chartOneValue >= 0.1 && chartOneValue <= 0.2) && (chartTwoValue >= 0.1 && chartTwoValue <= 0.2)) {
                 movedOne = false;
                 movedTwo = false;
                 showCam();
-            } else {
+            } else if ((chartOneValue < 0.1 && chartOneValue > (-0.1)) && (chartTwoValue < 0.1 && chartTwoValue > (-0.1)) ) {
                 standingCounter++;
+
+                console.log(standingCounter);
 
                 if(standingCounter >= 50) {
                     equalCounter = 0;
