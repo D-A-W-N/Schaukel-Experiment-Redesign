@@ -117,9 +117,9 @@ function setDifferenceInterval() {
             } else if ((chartOneValue < 0.1 && chartOneValue > (-0.1)) && (chartTwoValue < 0.1 && chartTwoValue > (-0.1)) ) {
                 standingCounter++;
 
-                console.log(standingCounter);
-
                 if(standingCounter >= 50) {
+                    movedOne = false;
+                    movedTwo = false;
                     equalCounter = 0;
                     standingCounter = 0;
                 }
