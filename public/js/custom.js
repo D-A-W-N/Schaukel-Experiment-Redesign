@@ -230,7 +230,7 @@ $(document).ready(function () {
 
     async function getFirstSensor() {
         socket.on("pot0", async function (message) {
-            message = parseFloat(message);
+            message = parseFloat(message) - 0.04;
             chartOneValue = message;
 
             if (message > 0.05 || message < (-0.05) && movedOne == false) {
@@ -254,7 +254,7 @@ $(document).ready(function () {
     async function getSecondSensor() {
         socket.on("pot1", async function (message) {
             message = parseFloat(message);
-            chartTwoValue = message;
+            chartTwoValue = message - 0.003;
             if (message > 0.05 || message < (-0.05) && movedTwo == false) {
                 movedTwo = true;
             }
