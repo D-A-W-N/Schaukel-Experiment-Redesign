@@ -3,6 +3,7 @@ let movedTwo = false;
 let chartOneValue = 0.00;
 let chartTwoValue = 0.00;
 let equalCounter = 0;
+let standingCounter = 0;
 let differenceInterval;
 let video = null;
 
@@ -113,6 +114,13 @@ function setDifferenceInterval() {
                 movedOne = false;
                 movedTwo = false;
                 showCam();
+            } else {
+                standingCounter++;
+
+                if(standingCounter >= 50) {
+                    equalCounter = 0;
+                    standingCounter = 0;
+                }
             }
         }
 
