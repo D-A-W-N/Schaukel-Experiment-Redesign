@@ -120,6 +120,7 @@ function setDifferenceInterval() {
                 console.log(standingCounter);
 
                 if(standingCounter >= 50) {
+                    $(".progress-bar").css("width", "0%");
                     movedOne = false;
                     movedTwo = false;
                     equalCounter = 0;
