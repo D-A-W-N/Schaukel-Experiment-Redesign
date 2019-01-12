@@ -4,7 +4,8 @@ let chartOneValue = 0.00;
 let chartTwoValue = 0.00;
 let equalCounter = 0;
 let standingCounter = 0;
-let differenceInterval;
+let chartOneCorrection = 0;
+let chartTwoCorrection = 0;
 let video = null;
 
 let socket = io();
@@ -117,10 +118,10 @@ function setDifferenceInterval() {
             } else if ((chartOneValue < 0.05 && chartOneValue > (-0.05)) && (chartTwoValue < 0.05 && chartTwoValue > (-0.05)) ) {
                 standingCounter++;
 
-                console.log(standingCounter);
-
                 if(standingCounter >= 50) {
                     $(".progress-bar").css("width", "0%");
+                    chartOneCorrection = 0 - (chartOneValue) + 0.02;
+                    chartTwoCorrection = 0 - (chartTwoValue);
                     movedOne = false;
                     movedTwo = false;
                     equalCounter = 0;
@@ -230,7 +231,7 @@ $(document).ready(function () {
 
     async function getFirstSensor() {
         socket.on("pot0", async function (message) {
-            message = parseFloat(message) - 0.03;
+            message = parseFloat(message) + (chartOneCorrection);
             chartOneValue = message;
 
             if (message > 0.05 || message < (-0.05) && movedOne == false) {
@@ -253,8 +254,8 @@ $(document).ready(function () {
 
     async function getSecondSensor() {
         socket.on("pot1", async function (message) {
-            message = parseFloat(message);
-            chartTwoValue = message - 0.003;
+            message = parseFloat(message) + (chartTwoCorrection);
+            chartTwoValue = message;
             if (message > 0.05 || message < (-0.05) && movedTwo == false) {
                 movedTwo = true;
             }
