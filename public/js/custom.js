@@ -111,16 +111,16 @@ function setDifferenceInterval() {
             socket.emit('equalCounter', 100);
             $(".progress-bar").css("width", "100%");
             
-            if((chartOneValue >= 0.05 && chartOneValue <= 0.2) && (chartTwoValue >= 0.05 && chartTwoValue <= 0.2)) {
+            if((chartOneValue >= 0.08 && chartOneValue <= 0.2) && (chartTwoValue >= 0.08 && chartTwoValue <= 0.2)) {
                 movedOne = false;
                 movedTwo = false;
                 showCam();
-            } else if ((chartOneValue < 0.05 && chartOneValue > (-0.05)) && (chartTwoValue < 0.05 && chartTwoValue > (-0.05)) ) {
+            } else if ((chartOneValue < 0.08 && chartOneValue > (-0.08)) && (chartTwoValue < 0.08 && chartTwoValue > (-0.08)) ) {
                 standingCounter++;
 
                 if(standingCounter >= 50) {
                     $(".progress-bar").css("width", "0%");
-                    chartOneCorrection = 0 - (chartOneValue) + 0.02;
+                    chartOneCorrection = 0 - (chartOneValue);
                     chartTwoCorrection = 0 - (chartTwoValue);
                     movedOne = false;
                     movedTwo = false;
