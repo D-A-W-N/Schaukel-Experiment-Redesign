@@ -1,6 +1,6 @@
 # Schaukel-Experiment-Redesign
 
-Script for signal value transmission via Arduino Uno and Javascript. The values are then displayed graphically on a LineChart in real time using Chart.js.
+Signal value transfer script Using the microcontroller "Arduino Uno" and the programming language "Javascript". The values are then graphically displayed in real time on a LineChart with Chart.js.
 
 ## Getting Started
 
