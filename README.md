@@ -10,8 +10,9 @@ These instructions will get you a copy of the project up and running on your loc
 
 What things you need to install the software and how to install them
 
+[Arduino StandardFirmata](https://github.com/firmata/arduino) - Firmata is a protocol for communicating with microcontrollers from software on a host computer. 
+
 ```
-[Arduino StandardFirmata](https://github.com/firmata/arduino) - Firmata is a protocol for communicating with microcontrollers
 latest NodeJS
 latest npm
 ```
