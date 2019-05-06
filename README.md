@@ -47,5 +47,6 @@ The whole life is a test
 
 ## Authors
 
-* **Patrick Schumacher** - *Initial work* - [Gentlepete](https://github.com/Gentlepete)
-* **Nils Schumacher** - *Initial work* - [D-A-W-N](https://github.com/D-A-W-N)
+* **Patrick Schumacher** - *Initial work & Frontend* - [Gentlepete](https://github.com/Gentlepete)
+* **Nils Schumacher** - *Initial work & Backend* - [D-A-W-N](https://github.com/D-A-W-N)
+* **Stephan Loewe** - *Webseite & Backend-Dropbox* - [StephanLoewe](https://github.com/StephanLoewe)
