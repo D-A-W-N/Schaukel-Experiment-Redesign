@@ -1,6 +1,6 @@
 # Schaukel-Experiment-Redesign
 
-Script for signal value transmission via Arduino Uno and Javascript. The values are then displayed graphically on a LineChart in real time using Chart.js.
+Signal value transfer script Using the microcontroller "Arduino Uno" and the programming language "Javascript". The values are then graphically displayed in real time on a LineChart with Chart.js.
 
 ## Getting Started
 
@@ -9,6 +9,8 @@ These instructions will get you a copy of the project up and running on your loc
 ### Prerequisites
 
 What things you need to install the software and how to install them
+
+[Arduino StandardFirmata](https://github.com/firmata/arduino) - Firmata is a protocol for communicating with microcontrollers from software on a host computer. 
 
 ```
 latest NodeJS
@@ -38,12 +40,13 @@ The whole life is a test
 ## Built With
 
 * [JavaScript](https://www.javascript.com/) - Programming Language
-* [NodeJS](https://maven.apache.org/) - JavaScript runtime built on Chrome's V8 JavaScript engine.
+* [NodeJS](https://nodejs.org/) - JavaScript runtime built on Chrome's V8 JavaScript engine.
 * [Johnny-Five](https://github.com/rwaldron/johnny-five/wiki/Getting-Started) - JavaScript Robotics & IoT Platform
 
 
 
 ## Authors
 
-* **Patrick Schumacher** - *Initial work* - [Gentlepete](https://github.com/Gentlepete)
-* **Nils Schumacher** - *Initial work* - [D-A-W-N](https://github.com/D-A-W-N)
+* **Patrick Schumacher** - *Initial work & Frontend* - [Gentlepete](https://github.com/Gentlepete)
+* **Nils Schumacher** - *Initial work & Backend* - [D-A-W-N](https://github.com/D-A-W-N)
+* **Stephan Loewe** - *Webseite & Backend-Dropbox* - [StephanLoewe](https://github.com/StephanLoewe)
