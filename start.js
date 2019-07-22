@@ -66,7 +66,7 @@ async function getPort() {
                     pm = port['manufacturer'];
 
                     //..Wenn Arduino gefunden setzte Portvariable uns Resolve den PortString
-                    if (typeof pm !== 'undefined' && pm.includes('arduino')) {
+                    if (typeof pm !== 'undefined' && (pm.includes('arduino') || pm.includes('Arduino'))) {
                         done = true;
                         let portString = port.comName.toString()
                         message('[PORT]', `Arduino an Port ${portString} erkannt. Verbinde...`);

@@ -111,7 +111,7 @@ function setDifferenceInterval() {
             socket.emit('equalCounter', 100);
             $(".progress-bar").css("width", "100%");
             
-            if((chartOneValue >= 0.05 && chartOneValue <= 0.2) && (chartTwoValue >= 0.05 && chartTwoValue <= 0.2)) {
+            if((chartOneValue >= 0.05 && chartOneValue <= 0.9) && (chartTwoValue >= 0.05 && chartTwoValue <= 0.9)) {
                 movedOne = false;
                 movedTwo = false;
                 showCam();
@@ -231,7 +231,7 @@ $(document).ready(function () {
 
     async function getFirstSensor() {
         socket.on("pot0", async function (message) {
-            message = parseFloat(message);// + (chartOneCorrection);
+            message = parseFloat(message) * (-1);// + (chartOneCorrection);
             chartOneValue = message;
 
             if (message > 0.05 || message < (-0.05) && movedOne == false) {
